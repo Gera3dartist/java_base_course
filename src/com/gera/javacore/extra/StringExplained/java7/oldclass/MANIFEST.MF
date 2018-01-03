@@ -1,0 +1,1 @@
+Main-Class: com.gera.javacore.extra.StringExplained.java7.oldclass.DigitSequence
