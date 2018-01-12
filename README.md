@@ -1,2 +1,3 @@
 # java_base_course
-learn Java by excercises from book
+learn Java by exercises from book
+-solved exercises added to repository
