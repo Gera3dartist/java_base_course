@@ -18,6 +18,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 
 public class DjaxtraShortPathEx10 {
+    /*
+    * Class represents a graph data structure
+    * */
     private Set<NeighborEx10<DjaxtraShortPathEx10>> neighbors;
     private String name;
 
