@@ -23,7 +23,7 @@ public class Ex14 {
         }
     }
     public static void main(String[] args) throws IOException {
-        Logger logger = Logger.getLogger("com.gera.javacore.exercises.Chapter5.Ex14");
+        Logger logger = Logger.getLogger("com.gera.javacore.exercises.Chapter5.Ex14_15_16");
         logger.setUseParentHandlers(false);
         Handler htmlHandler = new FileHandler("log.html");
         htmlHandler.setFormatter(new HTMLFormatter());

@@ -30,7 +30,6 @@ public class DjaxtraShortPathEx10 {
             this.result = result;
             this.predecessor = predecessor;
         }
-
         public String getShortestPath(String target) {
             StringBuilder s = new StringBuilder();
             s.append("Distance: ");
@@ -56,7 +55,7 @@ public class DjaxtraShortPathEx10 {
     }
 
     public Set<NeighborEx10<DjaxtraShortPathEx10>> getNeighbors() {
-        return neighbors != null ? neighbors : new HashSet<>();
+        return neighbors != null ? neighbors : Collections.emptySet();
     }
 
     public void setNeighbors(NeighborEx10 ...edges) {
