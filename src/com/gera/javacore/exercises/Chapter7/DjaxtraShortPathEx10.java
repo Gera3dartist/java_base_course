@@ -9,13 +9,11 @@ package com.gera.javacore.exercises.Chapter7;
  * города и расстояния до него. Представьте полученный граф в виде преобразования
  * названий городов в множества соседних городов.
  * Воспользуйтесь в данном алгоритме классом PriorityQueue<Neighbor>.
+ * Reference: http://www.vogella.com/tutorials/JavaAlgorithmsDijkstra/article.html
 *
 * */
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.PriorityQueue;
-import java.util.Set;
+import java.util.*;
 
 public class DjaxtraShortPathEx10 {
     /*
@@ -24,50 +22,85 @@ public class DjaxtraShortPathEx10 {
     private Set<NeighborEx10<DjaxtraShortPathEx10>> neighbors;
     private String name;
 
+    private static class Result {
+        private HashMap<String, Integer> result;
+        private HashMap<String, String> predecessor;
+
+        private Result(HashMap<String, Integer> result, HashMap<String, String> predecessor) {
+            this.result = result;
+            this.predecessor = predecessor;
+        }
+        public String getShortestPath(String target) {
+            StringBuilder s = new StringBuilder();
+            s.append("Distance: ");
+            s.append(result.get(target));
+            s.append(" Path: ");
+
+            String result = target;
+            while (result != null) {
+                s.append(String.format("%s -", result));
+                result = predecessor.get(result);
+            }
+            return s.toString();
+        }
+    }
+
+    public String getName() {
+        return name;
+    }
+
     public DjaxtraShortPathEx10(String name) {
         this.name = name;
 
     }
 
     public Set<NeighborEx10<DjaxtraShortPathEx10>> getNeighbors() {
-        return neighbors;
+        return neighbors != null ? neighbors : Collections.emptySet();
     }
 
     public void setNeighbors(NeighborEx10 ...edges) {
-        neighbors= new HashSet<NeighborEx10<DjaxtraShortPathEx10>>();
+        neighbors= new HashSet<>();
         for (NeighborEx10 item: edges) {
             neighbors.add(item);
         }
     }
 
-    public static void shortestPath(DjaxtraShortPathEx10 source, DjaxtraShortPathEx10 ...nodes) {
+    public static Result shortestPath(DjaxtraShortPathEx10 source, DjaxtraShortPathEx10 ...nodes) {
         HashMap<String, Integer> distances = new HashMap<>();
+        // initialize distances to infinity
+        for (DjaxtraShortPathEx10 node: nodes) {
+            distances.put(node.getName(), Integer.MAX_VALUE);
+        }
+        //distances
+        distances.put(source.name, 0);
 
-        PriorityQueue<NeighborEx10> nearCities =
+        PriorityQueue<NeighborEx10> unSettledNodes =
                 new PriorityQueue<>(nodes.length + 1, (a,b)-> a.getDistance() - b.getDistance());
         Set<DjaxtraShortPathEx10> visited  = new HashSet<>();
+        HashMap<String, String> predecessors = new HashMap<>();
 
         if (!visited.contains(source)) {visited.add(source);}
 
         // add source to the queue
-        nearCities.add(new NeighborEx10<DjaxtraShortPathEx10>(source, 0));
-        //distances
-        distances.put(source.name, 0);
-        while (!nearCities.isEmpty()) {
-            System.out.println(">>>queue: " + nearCities);
-            NeighborEx10 edge = nearCities.remove();
+        unSettledNodes.add(new NeighborEx10<DjaxtraShortPathEx10>(source, 0));
+
+        while (!unSettledNodes.isEmpty()) {
+            NeighborEx10 edge = unSettledNodes.remove();
             DjaxtraShortPathEx10 targ = (DjaxtraShortPathEx10) edge.getTarget();
             visited.add(targ);
             //
-            for (NeighborEx10 items: targ.neighbors) {
-                if (!visited.contains(edge.getTarget())) {nearCities.add(edge);}
+            for (NeighborEx10 items: targ.getNeighbors()) {
+                int newDistance = distances.get(targ.getName()) + items.getDistance();
+                String name = ((DjaxtraShortPathEx10) items.getTarget()).getName();
+
+                if (newDistance < distances.get(name)) {
+                    distances.put(name, newDistance);
+                    unSettledNodes.add(items);
+                    predecessors.put(name, targ.getName());
+                }
             }
         }
-        System.out.println(nearCities);
-
-
-
-
+        return new Result(distances, predecessors);
 
     }
 
@@ -102,8 +135,8 @@ public class DjaxtraShortPathEx10 {
 
 
         // find shortest path to shygorod
-        shortestPath(kyiv, zhytomyr, kyiv, vinnytsia, shygorod, khmelnytsky);
-
+        Result r = shortestPath(kyiv, zhytomyr, kyiv, vinnytsia, shygorod, khmelnytsky, krakiv);
+        System.out.println(r.getShortestPath("shygorod"));
 
     }
 }
