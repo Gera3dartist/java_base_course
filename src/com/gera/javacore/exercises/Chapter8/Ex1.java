@@ -1,7 +1,7 @@
 package com.gera.javacore.exercises.Chapter8;
 
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,5 +22,10 @@ public class Ex1 {
 //                .filter()
         Stream.of(valuse).filter(s -> s.length() > size).forEach(System.out::println);
 
+    }
+
+    public static void main2(String[] args) {
+        long count = Stream.of("foo", "bar", "bammm").filter(w -> w.length() > 3).count();
+        System.out.println(count);
     }
 }
